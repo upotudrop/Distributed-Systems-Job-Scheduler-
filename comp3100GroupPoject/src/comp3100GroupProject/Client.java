@@ -16,27 +16,47 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 
+
+
+
+
 public class Client {
 	private static InputStream in = null; 
 	private static OutputStream out = null;
 	private static Socket socket = null;	
+	private static  ArrayList<Jobs> jobs;
 	
 
 	public static void main(String[] args) throws IOException, VerifyError, ParserConfigurationException, SAXException{
 		
 		socket = new Socket("localhost", 50000);
 		
-		File inputFile = new File("/root/Downloads/ds-sim/system.xml");
-        
+		File inputFile = new File("/root/Documents/ds-sim/system.xml");
+		configFromXML XML = xmlparser.XMLParse(inputFile);
+		jobs = new ArrayList<Jobs>();
+		ArrayList<Servers> servers = new ArrayList<Servers>();
+		servers.addAll(configFromXML.getServers());	
+ 
 		messageServer("HELO");
+		String msg1 = messageFromServer();
 		messageFromServer();
+		System.out.println(msg1);
 		
 		messageServer("AUTH COMP3100"); //gets system.xml 
+		String msg2 = messageFromServer();
 		messageFromServer();
+		System.out.println(msg2);
 		
 		messageServer("REDY"); //Gets job information 
-		String jobs = messageFromServer();
-		System.out.println(jobs + "\n");
+		String msg3= messageFromServer();
+		messageFromServer();
+		System.out.println(msg3);
+		Jobs j = new Jobs(msg3);
+		jobs.add(j);
+		
+		messageServer("SCHD " + j.id + getLargestServer().type);
+		
+		
 		
 		
 //		ArrayList<Servers> servers = new ArrayList<Servers>();
@@ -71,11 +91,11 @@ public class Client {
 
 		int curCoreCount = 0; 
 		Servers largestServer = null;
-		for(int i=0; i < Servers.getServers().size(); i++) {
+		for(int i=0; i < configFromXML.getServers().size(); i++) {
 
-			if(Servers.getServers().get(i).coreCount > curCoreCount) {
-				curCoreCount = Servers.getServers().get(i).coreCount;
-				largestServer = Servers.getServers().get(i);
+			if(configFromXML.getServers().get(i).coreCount > curCoreCount) {
+				curCoreCount = configFromXML.getServers().get(i).coreCount;
+				largestServer = configFromXML.getServers().get(i);
 			}
 		}
 		return largestServer;

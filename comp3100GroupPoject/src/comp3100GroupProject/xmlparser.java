@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 
 
 public class xmlparser {
-	public static comp3100GroupProject.Servers XMLParse(File input) throws ParserConfigurationException, SAXException, IOException, VerifyError {
+	public static comp3100GroupProject.configFromXML XMLParse(File input) throws ParserConfigurationException, SAXException, IOException, VerifyError {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = factory.newDocumentBuilder();
@@ -23,7 +23,7 @@ public class xmlparser {
 
 		NodeList nodeList= doc.getElementsByTagName("server");
 
-		Servers comp3100 = new Servers(1024);
+		configFromXML config = new configFromXML(1024);
 
 		doc.getDocumentElement().normalize();
 
@@ -34,16 +34,16 @@ public class xmlparser {
 				Servers s = new Servers(n.getAttributes().getNamedItem("type").getNodeValue(),
 						Integer.parseInt(n.getAttributes().getNamedItem("limit").getNodeValue()),
 						Integer.parseInt(n.getAttributes().getNamedItem("bootupTime").getNodeValue()),
-						Double.parseDouble(n.getAttributes().getNamedItem("hourlyRate").getNodeValue()),
+						Double.parseDouble(n.getAttributes().getNamedItem("rate").getNodeValue()),
 						Integer.parseInt(n.getAttributes().getNamedItem("coreCount").getNodeValue()),
 						Integer.parseInt(n.getAttributes().getNamedItem("memory").getNodeValue()),
 						Integer.parseInt(n.getAttributes().getNamedItem("disk").getNodeValue()));
 
 
-				Servers.addServer(s);
+				configFromXML.addServer(s);
 
 			}
 		}
-		return comp3100;
+		return config;
 	}
 }
