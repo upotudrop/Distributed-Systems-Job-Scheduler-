@@ -27,16 +27,19 @@ public class Client {
 		socket = new Socket("localhost", 50000);
 		
 		File inputFile = new File("/root/Downloads/ds-sim/system.xml");
-        File jobFile = new File("/root/Downloads/ds-sim/ds-jobs.xml");
         
 		messageServer("HELO");
+		messageFromServer();
 		
 		messageServer("AUTH COMP3100"); //gets system.xml 
+		messageFromServer();
 		
 		messageServer("REDY"); //Gets job information 
+		String jobs = messageFromServer();
+		System.out.println(jobs);
 		
-		ArrayList<Servers> servers = new ArrayList<Servers>();
-		servers.addAll(Servers.getServers()); //get all servers from system.xml 
+		//ArrayList<Servers> servers = new ArrayList<Servers>();
+		//servers.addAll(Servers.getServers()); //get all servers from system.xml 
 		
 		long currentTime = System.currentTimeMillis(); //Start time 
 		
@@ -45,7 +48,7 @@ public class Client {
 
 		OutputStreamWriter toServer = new OutputStreamWriter(out = socket.getOutputStream());
 		BufferedWriter wts = new BufferedWriter(toServer);
-		wts.write(message);
+		wts.write(message + "\n");
 		wts.flush();
 		
 	}
