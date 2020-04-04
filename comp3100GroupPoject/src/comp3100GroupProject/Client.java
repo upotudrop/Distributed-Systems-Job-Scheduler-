@@ -36,10 +36,11 @@ public class Client {
 		
 		messageServer("REDY"); //Gets job information 
 		String jobs = messageFromServer();
-		System.out.println(jobs);
+		System.out.println(jobs + "\n");
 		
-		//ArrayList<Servers> servers = new ArrayList<Servers>();
-		//servers.addAll(Servers.getServers()); //get all servers from system.xml 
+		
+//		ArrayList<Servers> servers = new ArrayList<Servers>();
+//		servers.addAll(Servers.getServers()); //get all servers from system.xml 
 		
 		long currentTime = System.currentTimeMillis(); //Start time 
 		
